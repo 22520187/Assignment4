@@ -1,65 +1,39 @@
-<div class="login-container min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-  <div class="w-full" style="max-width: 420px;">
-    <!-- Main Login Card -->
-    <nz-card class="shadow-lg rounded-3 overflow-hidden">
-      <!-- Header -->
-      <div class="text-center mb-4 p-4">
-        <div class="mx-auto mb-3" style="width: 64px; height: 64px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-          <span class="text-white font-bold text-xl">sh</span>
-        </div>
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Welcome back</h1>
-        <p class="text-gray-500">Sign in to your PurchaSys</p>
+<div class="login-page">
+  <div class="tech-background"></div>
+
+  <div class="login-form-container" [@fadeSlideIn]>
+    <div class="login-form-card" [@staggerFade]>
+      <div class="no-account stagger-item ">
+        <span class="text-gray-500">No Account?</span><br />
+        <a routerLink="/auth/signup" class="text-primary-600 font-medium hover:underline cursor-pointer mr-4">Sign up</a>
       </div>
 
-      <!-- Login Form -->
-      <div class="p-4">
-        <form nz-form nzLayout="vertical" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
-          <!-- Email Field -->
-          <nz-form-item nz-form-item nzLayout="vertical" [formGroup]="loginForm" nzErrorTip="Please enter a valid email address">
-            <nz-form-label nzRequired>Email Address</nz-form-label>
-            <nz-form-control>
-              <input nz-input type="email" formControlName="email" placeholder="Enter your email" class="h-12 rounded-lg border-radius" />
-            </nz-form-control>
-          </nz-form-item>
+      <h2 class="text-sm font-normal mb-1 stagger-item">Welcome to PurchaSys</h2>
+      <h1 class="text-4xl font-bold mb-8 text-primary-600 stagger-item">Sign in</h1>
 
-          <!-- Password Field -->
-          <nz-form-item >
-            <nz-form-label nzRequired>Password</nz-form-label>
-            <nz-form-control nzErrorTip="Password must be at least 6 characters">
-              <input nz-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Enter your password" class="h-12 rounded-lg border-radius" />
-              <ng-template #passwordSuffix>
-                <button type="button" class="text-gray-400 hover:text-gray-600" (click)="togglePasswordVisibility()">
-                  <i nz-icon [nzType]="showPassword ? 'eye-invisible' : 'eye'" nzTheme="outline"></i>
-                </button>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
+      <form nz-form nzLayout="vertical" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full stagger-item">
+        <nz-form-item class="mb-4">
+          <nz-form-label nzRequired>Enter your Email</nz-form-label>
+          <nz-form-control nzErrorTip="Please enter a valid email!">
+            <input nz-input type="email" formControlName="email" placeholder="Email address" class="py-3 rounded-input" />
+          </nz-form-control>
+        </nz-form-item>
 
-          <!-- Remember Me & Forgot Password -->
-          <div class="flex items-center justify-between mb-2">
-            <label nz-checkbox formControlName="rememberMe" class="text-sm text-gray-600">Remember Me</label>
-            <a href="#" class="text-blue-600 text-sm">Forgot Password?</a>
-          </div>
+        <nz-form-item class="mb-2">
+          <nz-form-label nzRequired>Enter your Password</nz-form-label>
+          <nz-form-control nzErrorTip="Please enter your password!">
+            <input nz-input type="password" formControlName="password" placeholder="Password" class="py-3 rounded-input" />
+          </nz-form-control>
+        </nz-form-item>
 
-          <!-- Login Button -->
-          <button nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="isLoading" [disabled]="loginForm.invalid || isLoading" class="h-12 rounded-lg font-semibold text-lg bg-gradient-to-r from-blue-500 to-indigo-600">
-            {{ isLoading ? 'Logging in...' : 'Login' }}
-          </button>
-
-          <!-- Divider -->
-          <nz-divider>or</nz-divider>
-          
-        </form>
-
-        <!-- Footer -->
-        <div class="text-center mt-6 pt-4 border-t border-gray-200">
-          <p class="text-gray-600 mb-0">
-            Don't have an account?
-            <a href="/signup" class="text-blue-600 font-semibold">Sign up here</a>
-          </p>
+        <div class="flex justify-end mb-6">
+          <a routerLink="/auth/forgot-password" class="text-xs text-primary hover:underline">Forgot Password?</a>
         </div>
-      </div>
-    </nz-card>
 
+        <button nz-button nzType="primary" [nzLoading]="loading" class="w-full h-12 rounded-input gradient-btn">
+          Sign in
+        </button>
+      </form>
+    </div>
   </div>
 </div>
