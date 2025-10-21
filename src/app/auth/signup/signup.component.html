@@ -1,0 +1,58 @@
+<div class="signup-page">
+    <div class="signup-container">
+
+        <!--Left Side - Image-->
+        <div class="signup-image-section">
+            <img src="https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&w=800&q=75" alt="Signup Image" class="w-full h-full object-cover" />
+        </div>
+
+        <!--Right Side - Form-->
+        <div class="signup-form-section" [@fadeSlideIn]>
+            <div class="signup-form-card" [@staggerFade]>
+                <div class="no-account stagger-item">
+                    <span>Have an account?</span> <br />
+                    <a routerLink="/auth/login" class="text-primary-600 font-medium hover:underline transition-all mr-4">Sign in</a>
+                </div>
+
+                <h2 class="text-sm font-normal mb-1 stagger-item">Welcome toPurchaSys</h2>
+                <h1 class="text-4xl font-bold mb-8 text-primary-600 stagger-item">Sign up</h1>
+
+                <form nz-form nzLayout="vertical" [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="w-full stagger-item">
+
+                    <nz-form-item class="mb-4">
+                        <nz-form-label nzRequired>Enter your Username</nz-form-label>
+                        <nz-form-control nzErrorTip="Please enter a valid username!">
+                            <input nz-input type="text" formControlName="username" placeholder="Username" class="py-3 rounded-input" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item class="mb-4">
+                        <nz-form-label nzRequired>Enter your Email</nz-form-label>
+                        <nz-form-control nzErrorTip="Please enter a valid email!">
+                            <input nz-input type="email" formControlName="email" placeholder="Email address" class="py-3 rounded-input" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item class="mb-4">
+                        <nz-form-label nzRequired>Enter your Password</nz-form-label>
+                        <nz-form-control nzErrorTip="Please enter a valid password!">
+                            <input nz-input type="password" formControlName="password" placeholder="Password" class="py-3 rounded-input" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item class="mb-4">
+                        <nz-form-label nzRequired>Confirm Password</nz-form-label>
+                        <nz-form-control nzErrorTip="Please enter a valid password!">
+                            <input nz-input type="password" formControlName="confirmPassword" placeholder="Confirm Password" class="py-3 rounded-input" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <button nz-button nzType="primary" [nzLoading]="loading" class="w-full h-12 rounded-input gradient-btn">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>

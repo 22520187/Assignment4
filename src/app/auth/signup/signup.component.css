@@ -1,0 +1,217 @@
+.signup-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Layout chính --- */
+.signup-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+  
+.signup-form-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #f8fafc;
+}
+
+.signup-image-section {
+  position: relative;
+  overflow: hidden;
+}
+  
+/* --- Form card --- */
+.signup-form-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+  min-height: 500px;
+  border: 1px solid #e5e7eb;
+  width: 100%;
+  max-width: 450px;
+}
+  
+  .no-account {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    text-align: right;
+  }
+  
+/* --- Input và nút --- */
+.rounded-input {
+  border-radius: 8px !important;
+  height: 48px !important;
+  border: 1px solid #e5e7eb !important;
+  transition: all 0.3s ease !important;
+  background: #fff !important;
+}
+
+.rounded-input:focus {
+  border-color: #50bbf5 !important;
+  box-shadow: 0 0 0 3px rgba(80, 187, 245, 0.1) !important;
+  outline: none !important;
+}
+  
+.gradient-btn {
+  background: linear-gradient(135deg, #50bbf5 0%, #5069f5 100%) !important;
+  border: none !important;
+  font-weight: 500;
+  color: #fff !important;
+  border-radius: 8px !important;
+  height: 48px !important;
+  transition: all 0.3s ease !important;
+}
+
+.gradient-btn:hover {
+  background: linear-gradient(135deg, #409de0 0%, #4057d8 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(80, 105, 245, 0.3) !important;
+}
+
+.gradient-btn:active {
+  transform: translateY(0);
+}
+  
+/* --- Image styling --- */
+.signup-image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+  
+  /* --- Tailwind CSS custom colors --- */
+  .text-primary-600 {
+    color: #41a1e3 !important;
+  }
+  
+  .text-gray-500 {
+    color: #6b7280 !important;
+  }
+  
+  .font-medium {
+    font-weight: 500 !important;
+  }
+  
+  .font-bold {
+    font-weight: 700 !important;
+  }
+  
+  .font-normal {
+    font-weight: 400 !important;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem !important;
+  }
+  
+  .text-xs {
+    font-size: 0.75rem !important;
+  }
+  
+  .text-4xl {
+    font-size: 2.25rem !important;
+  }
+  
+  .mb-1 {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem !important;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .mb-8 {
+    margin-bottom: 2rem !important;
+  }
+  
+  .w-full {
+    width: 100% !important;
+  }
+  
+  .h-12 {
+    height: 3rem !important;
+  }
+  
+  .py-3 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  
+  .flex {
+    display: flex !important;
+  }
+  
+  .justify-end {
+    justify-content: flex-end !important;
+  }
+  
+  .hover\:underline:hover {
+    text-decoration: underline !important;
+  }
+  
+  .transition-all {
+    transition: all 0.3s ease !important;
+  }
+  
+  /* --- Animation cho các phần tử --- */
+  .stagger-item {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: staggerFadeIn 0.5s ease-out forwards;
+  }
+  
+  .stagger-item:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-item:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-item:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-item:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-item:nth-child(5) { animation-delay: 0.5s; }
+  
+  @keyframes staggerFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* --- Responsive --- */
+  @media (max-width: 768px) {
+    .signup-container {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+    
+    .signup-image-section {
+      display: none;
+    }
+    
+    .signup-form-section {
+      padding: 1rem;
+    }
+    
+    .signup-form-card {
+      padding: 1.5rem;
+    }
+  }
