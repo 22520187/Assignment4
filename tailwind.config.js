@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      width: {
+        50: '12.5rem',
+      },
       colors: {
         primary: {
           50: '#e3f6fe',

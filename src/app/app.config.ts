@@ -1,6 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
@@ -22,6 +21,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule, ReactiveFormsModule),
     provideAnimationsAsync(),
     provideHttpClient(),
-    { provide: NzIconModule, useValue: [MailOutline, EyeOutline, EyeInvisibleOutline, LockOutline] }
+    { provide: NzIconModule, useValue: [MailOutline, EyeOutline, EyeInvisibleOutline, LockOutline] },
   ]
 };

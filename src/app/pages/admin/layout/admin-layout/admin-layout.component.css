@@ -1,0 +1,78 @@
+/* Additional styles if needed */
+.flex {
+    display: flex;
+  }
+  
+  .h-screen {
+    height: 100vh;
+  }
+  
+  .bg-gray-50 {
+    background-color: #f9fafb;
+  }
+  
+  .flex-1 {
+    flex: 1 1 0%;
+  }
+  
+  .flex-col {
+    flex-direction: column;
+  }
+  
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .bg-white {
+    background-color: white;
+  }
+  
+  .border-b {
+    border-bottom-width: 1px;
+  }
+  
+  .border-gray-100 {
+    border-color: #f3f4f6;
+  }
+  
+  .py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+  
+  .px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .drop-shadow-sm {
+    filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.05));
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .justify-end {
+    justify-content: flex-end;
+  }
+  
+  .gap-6 {
+    gap: 1.5rem;
+  }
+  
+  .relative {
+    position: relative;
+  }
+  
+  .overflow-y-auto {
+    overflow-y: auto;
+  }
+  
+  .pt-4 {
+    padding-top: 1rem;
+  }
+  
+  .pb-6 {
+    padding-bottom: 1.5rem;
+  }

@@ -1,0 +1,61 @@
+<aside class="h-screen drop-shadow-sm flex flex-col transition-all duration-300 bg-white" 
+       [class.w-20]="isCollapsed"
+       [class.w-50]="!isCollapsed">
+
+    <!-- Header with Logo and Toggle Button -->
+    <div class="py-2 ps-1 flex flex-col">
+        <!-- Logo and Toggle Button Row -->
+        <div class="flex justify-between items-center">
+            <a routerLink="/admin/dashboard" class="flex flex-col items-center">
+                <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent px-2 py-1 rounded-md">
+                    {{ isCollapsed ? 'PS' : 'PurchaSys' }}
+                </span>
+                <!-- Logo - different sizes based on collapsed state -->
+                <img src="assets/logo.png" alt="Logo" 
+                     [class]="isCollapsed ? 'w-6 h-6 mt-1' : 'w-max h-max mt-1'" 
+                     *ngIf="!isCollapsed">
+            </a>
+            <button (click)="onToggleSidebar()" class="p-1 rounded-full hover:bg-gray-200 transition">
+                <i class="fas" [class.fa-chevron-right]="isCollapsed" [class.fa-chevron-left]="!isCollapsed"></i>
+            </button>
+        </div>
+        
+        <!-- Collapsed Logo Row - only show when collapsed -->
+        <div class="flex justify-center mt-2" *ngIf="isCollapsed">
+            <img src="assets/logo.png" alt="Logo" class="w-20 h-20">
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="flex-1 mt-auto h-full">
+        <div class="ps-2 pe-3 h-full flex-1">
+            <div class="flex flex-col justify-center h-9/10">
+                <div *ngFor="let item of sidebarItems" class="animate-fade-in" [@slideIn]>
+
+                    <!-- Logout button -->
+                    <button *ngIf="item.route === '/logout'" 
+                            (click)="onLogout()"
+                            class="flex gap-3 px-4 py-3 text-base rounded-xl items-center transition-all duration-300 hover:bg-blue-50 text-gray-600 w-full"
+                            [class.justify-around]="isCollapsed">
+                        <i [class]="item.icon"></i>
+                        <span *ngIf="!isCollapsed">{{ item.label }}</span>
+                    </button>
+
+                    <!-- Regular Navigation Links -->
+                    <a *ngIf="item.route !== '/logout'" 
+                       [routerLink]="item.route"
+                       routerLinkActive="bg-blue-500 text-white font-medium" 
+                       [routerLinkActiveOptions]="{exact: false}"
+                       class="flex gap-3 px-4 py-3 text-base rounded-xl items-center transition-all duration-300 text-gray-600 hover:bg-blue-50 w-full"
+                       [class.justify-around]="isCollapsed" 
+                       [@hoverEffect]="'normal'"
+                       (mouseenter)="onMouseEnter($event)"
+                       (mouseleave)="onMouseLeave($event)">
+                        <i [class]="item.icon"></i>
+                        <span *ngIf="!isCollapsed">{{ item.label }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</aside>
