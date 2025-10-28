@@ -1,1 +1,203 @@
-<p>user works!</p>
+<div class="user-management-container p-6">
+    <!--Page Header-->
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Quản lý người dùng</h1>
+        <p class="text-gray-600">Quản lý người dùng PurchaSys</p>
+    </div>
+
+    <!--Statistics Cards-->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6" *ngIf="!isLoading">
+        <!--Total Users-->
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 font-medium mb-1">Tổng người dùng</p>
+                    <h3 class="text-3xl font-bold text-gray-800">{{ getTotalUsersCount() | number }}</h3>
+                </div>
+                <div class="bg-blue-100 p-4 rounded-full">
+                    <i class="fas fa-users text-blue-600 text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!--Active Users-->
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 font-medium mb-1">Người dùng hoạt động</p>
+                    <h3 class="text-3xl font-bold text-gray-800">{{ getActiveUsersCount() | number }}</h3>
+                </div>
+                <div class="bg-green-100 p-4 rounded-full">
+                    <i class="fas fa-user-check text-green-600 text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disabled Users -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-red-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 font-medium mb-1">Người dùng bị vô hiệu</p>
+                    <h3 class="text-3xl font-bold text-gray-800">{{ getDisabledUsersCount() }}</h3>
+                </div>
+                <div class="bg-red-100 p-4 rounded-full">
+                    <i class="fas fa-user-slash text-red-600 text-2xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Filter & Search-->
+    <div class="bg-white rounded-xl shadow-sm mb-6 p-6" *ngIf="!isLoading">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!--Search-->
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Tìm theo tên, email, số điện thoại..." [(ngModel)]="searchQuery"
+                        (ngModelChange)="filterUsers()"
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!--Status Filter-->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái</label>
+                <select [(ngModel)]="statusFilter" (ngModelChange)="filterUsers()"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="all">Tất cả</option>
+                    <option value="active">Hoạt động</option>
+                    <option value="disabled">Vô hiệu hóa</option>
+                </select>
+            </div>
+
+            <!--Role Filter-->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Vai trò</label>
+                <select [(ngModel)]="roleFilter" (ngModelChange)="filterUsers()"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option value="all">Tất cả</option>
+                    <option value="admin">Quản trị viên</option>
+                    <option value="user">Người dùng</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!--User Table-->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden" *ngIf="!isLoading">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Người dùng</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Liên hệ</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Vai trò</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Đơn hàng</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Ngày tạo</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Trạng thái</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr *ngFor="let user of paginatedUsers; let i = index" class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                                    {{ user.name.charAt(0) }}
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">{{ user.name }}</div>
+                                    <div class="text-xs text-gray-500">ID: {{ user.id }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ user.email }}</div>
+                            <div class="text-sm text-gray-500">{{ user.phone }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium"
+                                [ngClass]="getRoleClass(user.role)">
+                                {{ getRoleText(user.role) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ user.totalOrders }}</div>
+                            <div class="text-xs text-gray-500">đơn hàng</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ user.createdAt }}</div>
+                            <div class="text-xs text-gray-500">{{ user.lastLogin }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium"
+                                [class.bg-green-100]="user.status === 'active'"
+                                [class.text-green-800]="user.status === 'active'"
+                                [class.bg-red-100]="user.status === 'disabled'"
+                                [class.text-red-800]="user.status === 'disabled'">
+                                {{ getStatusText(user.status) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button (click)="toggleUserStatus(user)" [class.bg-red-100]="user.status === 'active'"
+                                [class.text-red-700]="user.status === 'active'"
+                                [class.hover:bg-red-200]="user.status === 'active'"
+                                [class.bg-green-100]="user.status ==='disabled'"
+                                [class.text-green-700]="user.status === 'disabled'"
+                                [class.hover:bg-green-200]="user.status === 'disabled'"
+                                class="px-4 py-2 rounded-lg font-medium transition">
+                                <i [class.fa-ban]="user.status === 'active'"
+                                    [class.fa-check]="user.status === 'disabled'" class="mr-2"></i>
+                                {{ user.status === 'active' ? 'Vô hiệu hóa' : 'Kích hoạt' }}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!--Empty State-->
+            <div *ngIf="filteredUsers.length === 0" class="text-center py-12">
+                <i class="fas fa-users text-6xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 text-lg font-medium">Không tìm thấy người dùng</p>
+                <p class="text-gray-500 text-sm mt-2">Không có người dùng nào phù hợp với các bộ lọc đã chọn</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="filteredUsers.length > 0" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+                Hiển thị {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ currentPage * itemsPerPage > filteredUsers.length ? filteredUsers.length : currentPage * itemsPerPage }} 
+                trong tổng số {{ filteredUsers.length }} người dùng
+            </div>
+            <div class="flex items-center space-x-2">
+                <button 
+                    (click)="previousPage()"
+                    [disabled]="currentPage === 1"
+                    class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium">
+                    {{ currentPage }} / {{ totalPages }}
+                </div>
+                <button 
+                    (click)="nextPage()"
+                    [disabled]="currentPage === totalPages"
+                    class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--Loading State-->
+    <div *ngIf="isLoading" class="flex items-center justify-center h-96 bg-white rounded-xl shadow-sm">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full w-12 h-12 border-blue-600 border-b-2 mb-4"></div>
+            <p class="text-gray-600">Đang tải dữ liệu người dùng...</p>
+        </div>
+    
+    </div>
+</div>
