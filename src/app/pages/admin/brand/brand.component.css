@@ -1,0 +1,19 @@
+/* Brand Card grid and modal fixes (tailwind sẽ dùng là chính)
+   Nếu muốn custom thêm cho modal/card thì thêm dưới đây. */
+
+/* Modal backdrop fix */
+:host ::ng-deep .cdk-global-overlay-wrapper {
+    align-items: flex-start;
+}
+
+/* Optional custom styles for brand card */
+.card-shadow {
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+}
+
+/* Responsive tweak for modal */
+@media (max-width: 640px) {
+  .modal-content {
+    padding: 1.25rem;
+  }
+}

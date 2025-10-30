@@ -1,1 +1,207 @@
-<p>products works!</p>
+<div class="p-4 md:p-6">
+    <!-- Top bar-->
+     <div class="flex items-center justify-between mb-4 gap-3">
+        <div class="flex-1 max-w-xl relative">
+            <input
+            type="text"
+            placeholder="Tìm theo tên, brand, category..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="searchTerm.set($event)"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-search"></i></span>
+        </div>
+
+        <div class="hidden sm:block text-sm text-gray-600 whitespace-nowrap"> 
+            {{ visibleProducts().length }} sản phẩm
+        </div>
+
+        <div class="flex items-center gap-2">
+            <label class="text-sm text-gray-600">Sắp xếp theo</label>
+			<select
+				class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				[(ngModel)]="sortBy"
+				(ngModelChange)="sortBy.set($event)"
+			>
+				<option value="newest">Mới nhất</option>
+				<option value="price-asc">Giá: Thấp đến cao</option>
+				<option value="price-desc">Giá: Cao đến thấp</option>
+				<option value="rating-desc">Đánh giá</option>
+				<option value="name-asc">Tên: A → Z</option>
+			</select>
+        </div>
+
+        <button class="px-3 py-2 rounded-md border hover:bg-blue-600 transition bg-blue-500 text-white" (click)="openAddModal()">+ Thêm sản phẩm</button>
+     </div>
+
+     <div class="grid grid-cols-12 gap-4">
+		<!-- Filters -->
+		<aside class="col-span-12 md:col-span-3 lg:col-span-2 bg-white rounded-lg border">
+			<div class="p-4 border-b flex items-center justify-between">
+				<h3 class="font-semibold">Bộ lọc</h3>
+				<button class="text-sm text-blue-600 hover:underline" (click)="clearFilters()">Xóa bộ lọc</button>
+			</div>
+
+			<!-- Categories -->
+			<div class="p-4 border-b">
+				<div class="flex items-center justify-between mb-2">
+					<h4 class="font-medium">Danh mục</h4>
+				</div>
+				<div class="space-y-1">
+					<button
+						class="w-full text-left px-2 py-2 rounded-md hover:bg-gray-50 flex items-center justify-between"
+						[class.bg-blue-50]="selectedCategory() === null"
+						[class.text-blue-700]="selectedCategory() === null"
+						(click)="toggleCategory(null)"
+					>
+						<span>Tất cả</span>
+					</button>
+
+					<button
+						*ngFor="let c of categories()"
+						class="w-full text-left px-2 py-2 rounded-md hover:bg-gray-50 flex items-center justify-between"
+						[class.bg-blue-50]="selectedCategory() === c.name"
+						[class.text-blue-700]="selectedCategory() === c.name"
+						(click)="toggleCategory(c.name)"
+					>
+						<span>{{ c.name }}</span>
+						<span class="text-gray-500 text-sm">{{ c.count }}</span>
+					</button>
+				</div>
+			</div>
+
+			<!-- Brands -->
+			<div class="p-4">
+				<div class="flex items-center justify-between mb-2">
+					<h4 class="font-medium">Thương hiệu</h4>
+				</div>
+				<div class="space-y-2">
+					<label
+						*ngFor="let b of brands()"
+						class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 cursor-pointer"
+					>
+						<span class="flex items-center gap-2">
+							<input
+								type="checkbox"
+								[checked]="selectedBrands().has(b.name)"
+								(change)="toggleBrand(b.name)"
+							/>
+							<span>{{ b.name }}</span>
+						</span>
+						<span class="text-gray-500 text-sm">{{ b.count }}</span>
+					</label>
+				</div>
+			</div>
+		</aside>
+
+		<!-- Products grid -->
+		<section class="col-span-12 md:col-span-9 lg:col-span-10">
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+				<div
+					*ngFor="let p of visibleProducts()"
+					class="bg-white rounded-lg border shadow-sm hover:shadow transition overflow-hidden"
+				>
+					<div class="aspect-[4/3] bg-gray-100">
+						<img [src]="p.imageUrl" [alt]="p.name" class="w-full h-full object-cover" />
+					</div>
+
+					<div class="p-4">
+						<p class="text-xs text-gray-500 mb-1">{{ p.category }} • {{ p.brand }}</p>
+
+						<div class="flex items-start justify-between">
+							<h3 class="font-semibold line-clamp-2 pr-2">{{ p.name }}</h3>
+						</div>
+
+						<div class="flex items-center gap-2 mb-2">
+							<div class="flex">
+								<span *ngFor="let s of starsArray; let i = index" [class]="isStarFilled(i, p.rating) ? 'text-yellow-400' : 'text-gray-300'">&#9733;</span>
+							</div>
+							<div class="text-sm text-gray-600">
+								<b>{{ p.rating | number: '1.1-1' }}</b> ({{ p.reviewCount }})
+							</div>
+						</div>
+                        <span class="text-blue-600 font-semibold text-xl whitespace-nowrap">{{ formatCurrency(p.price) }}</span>
+
+						<div class="mt-4 flex items-center gap-2">
+							<button class="px-4 py-2 text-sm rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100" (click)="openEditModal(p)">Sửa</button>
+							<button class="px-4 py-2 text-sm rounded-md bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700" (click)="deleteProduct(p)">Xoá</button>
+						</div>
+					</div>
+				</div>
+
+				<div *ngIf="visibleProducts().length === 0" class="col-span-full">
+					<div class="border rounded-lg p-8 text-center text-gray-500">Không có sản phẩm phù hợp.</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<!-- Modal (giữ nguyên CRUD như trước) -->
+	<div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center">
+		<div class="absolute inset-0 bg-black/40" (click)="closeModal()"></div>
+		<div class="relative bg-white w-[95%] max-w-2xl rounded-lg shadow-lg">
+			<div class="p-4 border-b flex items-center justify-between">
+				<h3 class="text-lg font-semibold">{{ isEditing ? 'Sửa sản phẩm' : 'Thêm sản phẩm' }}</h3>
+				<button (click)="closeModal()" class="px-3 py-1 rounded-md hover:bg-gray-100">✕</button>
+			</div>
+
+			<form class="p-4 space-y-4" (ngSubmit)="saveProduct()">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="space-y-2">
+						<label class="block text-sm font-medium">Tên sản phẩm</label>
+						<input type="text" class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" [(ngModel)]="form.name" name="name" required />
+					</div>
+					<div class="space-y-2">
+						<label class="block text-sm font-medium">Giá (VND)</label>
+						<input type="number" min="0" class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" [(ngModel)]="form.price" name="price" required />
+					</div>
+					<div class="space-y-2">
+						<label class="block text-sm font-medium">Ảnh sản phẩm</label>
+						<input type="file" accept="image/*" (change)="onImageFileChange($event)" />
+						<div *ngIf="imagePreview" class="aspect-[4/3] bg-gray-50 border rounded mt-2 flex items-center justify-center">
+							<img [src]="imagePreview" alt="Ảnh sản phẩm" class="max-h-32 max-w-full object-contain" />
+						</div>
+					</div>
+					<div class="space-y-2">
+						<label class="block text-sm font-medium">Danh mục</label>
+						<select class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" [(ngModel)]="form.category" name="category" required>
+							<option value="" disabled>Chọn danh mục</option>
+							<option *ngFor="let c of categories()" [ngValue]="c.name">{{ c.name }}</option>
+						</select>
+					</div>
+					<div class="space-y-2">
+						<label class="block text-sm font-medium">Thương hiệu</label>
+						<select class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" [(ngModel)]="form.brand" name="brand" required>
+							<option value="" disabled>Chọn thương hiệu</option>
+							<option *ngFor="let b of brands()" [ngValue]="b.name">{{ b.name }}</option>
+						</select>
+					</div>
+					<div class="space-y-2">
+						<label class="block text-sm font-medium">Mô tả</label>
+						<textarea rows="3" class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" [(ngModel)]="form.description" name="description"></textarea>
+					</div>
+					<div class="space-y-2 md:col-span-2 flex gap-8 items-center">
+						<div>
+							<label class="block text-sm font-medium">Số sao</label>
+							<div class="flex">
+								<span *ngFor="let s of starsArray; let i = index" [class]="isStarFilled(i, form.rating) ? 'text-yellow-400' : 'text-gray-300'">&#9733;</span>
+								<span class="ml-2 text-gray-600 font-semibold">{{ form.rating | number: '1.1-1' }}</span>
+							</div>
+						</div>
+						<div>
+							<label class="block text-sm font-medium">Lượt đánh giá</label>
+							<span class="text-gray-700 font-semibold">{{ form.reviewCount }}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="pt-2 flex items-center justify-end gap-2">
+					<button type="button" (click)="closeModal()" class="px-4 py-2 rounded-md border hover:bg-gray-50">Huỷ</button>
+					<button type="submit" class="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white">
+						{{ isEditing ? 'Lưu thay đổi' : 'Thêm mới' }}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

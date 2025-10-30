@@ -1,0 +1,26 @@
+/* Ẩn track mặc định của range và hiển thị 2 thumb chồng lên nhau */
+.range-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	background: transparent;
+	pointer-events: none; /* để click xuyên, chỉ kéo thumb */
+}
+.range-thumb::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	pointer-events: auto;
+	height: 16px;
+	width: 16px;
+	border-radius: 9999px;
+	background: #2563eb; /* blue-600 */
+	border: 2px solid white;
+	box-shadow: 0 0 0 1px #cbd5e1; /* slate-300 */
+}
+.range-thumb::-moz-range-thumb {
+	pointer-events: auto;
+	height: 16px;
+	width: 16px;
+	border-radius: 9999px;
+	background: #2563eb;
+	border: 2px solid white;
+}
